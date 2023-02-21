@@ -1,7 +1,7 @@
 import pygsheets
 import pandas as pd
 
-from src.constants.gsheets_constants import DEFAULT_SPREADSHEET_NAME
+from src.constants.gsheets_constants import DEFAULT_SPREADSHEET_NAME, SHEETS_AUTHENTICATION_FILE
 from src.constants.report_constants import SheetHeaders
 
 
@@ -15,7 +15,7 @@ def initialize_column_headers(worksheet: pygsheets.Worksheet) -> None:
 def write_to_sheets(write_data: pd.DataFrame, spreadsheet_name: str = DEFAULT_SPREADSHEET_NAME):
     # Login/Authenticate
     print('Authenticating to Google Sheets')
-    gc = pygsheets.authorize(service_account_file='data/gsheets_authentication.json')
+    gc = pygsheets.authorize(service_account_file=SHEETS_AUTHENTICATION_FILE)
 
     print('Open sheet to edit')
     sheet = gc.open(spreadsheet_name)
