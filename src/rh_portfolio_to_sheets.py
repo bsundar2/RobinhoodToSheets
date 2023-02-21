@@ -26,7 +26,8 @@ def reorder_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
 
 
 def add_extra_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
-    for column in AdditionalColumns:
+    user_columns = AdditionalColumns(portfolio)
+    for column in user_columns.get_columns():
         portfolio.insert(column.value.col_index,
                          column.value.col_name,
                          value=column.value.col_value)
