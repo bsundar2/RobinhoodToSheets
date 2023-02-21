@@ -127,3 +127,20 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/env1/
+
+# Idea
+.idea
+/data/gsheets_authentication.json
+/get_env_details
+/initialize
+/postactivate
+/postdeactivate
+/postmkproject
+/postmkvirtualenv
+/postrmvirtualenv
+/preactivate
+/predeactivate
+/premkproject
+/premkvirtualenv
+/prermvirtualenv
