@@ -5,7 +5,7 @@ import pandas as pd
 
 from src.external_services.robinhood import get_rh_portfolio
 from src.constants.robinhood_constants import (
-    RobinhoodColumns
+    RobinhoodApiData
 )
 from src.constants.column_constants import AdditionalColumns
 
@@ -19,7 +19,7 @@ def get_rh_portfolio_as_df() -> pd.DataFrame:
 
 
 def reorder_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
-    column_list = [column.value for column in RobinhoodColumns]
+    column_list = [column.value for column in RobinhoodApiData]
     ordered_columns = column_list + (portfolio.columns.drop(column_list).tolist())
     portfolio = portfolio[ordered_columns]
     return portfolio

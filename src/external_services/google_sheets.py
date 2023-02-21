@@ -1,9 +1,7 @@
 import pygsheets
 import pandas as pd
 
-from src.constants.robinhood_constants import (
-    DEFAULT_SPREADSHEET_NAME
-)
+from src.constants.gsheets_constants import DEFAULT_SPREADSHEET_NAME
 from src.constants.report_constants import SheetHeaders
 
 
