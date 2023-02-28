@@ -1,0 +1,16 @@
+{
+  "BABA": {
+    "price": "1.5",
+    "quantity": "1",
+    "average_buy_price": "1",
+    "equity": "1.5",
+    "percent_change": "-1.10",
+    "intraday_percent_change": "0.00",
+    "equity_change": "-1",
+    "type": "adr",
+    "name": "Alibaba",
+    "id": "2a696f9d68e1-asda-123",
+    "pe_ratio": "304.084000",
+    "percentage": "5.78"
+  }
+}
