@@ -23,8 +23,8 @@ class AdditionalColumns:
                 'total',
                 4,
                 (
-                    self.portfolio[RhData.AVG_BUY_PRICE.value.name].astype(RhData.AVG_BUY_PRICE.value.col_type) *
-                    self.portfolio[RhData.QUANTITY.value.col_name].astype(RhData.QUANTITY.value.col_type)
+                    self.portfolio[RhData.AVG_BUY_PRICE.value.name].astype(RhData.AVG_BUY_PRICE.value.type) *
+                    self.portfolio[RhData.QUANTITY.value.name].astype(RhData.QUANTITY.value.type)
                 )
             ),
             ColumnOrderType('dividend', 5, None),

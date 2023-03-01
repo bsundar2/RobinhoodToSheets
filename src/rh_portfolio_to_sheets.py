@@ -4,6 +4,7 @@ File containing the logic of exporting a Robinhood portfolio to Google Sheets.
 import pandas as pd
 
 from src.external_services.robinhood import get_rh_portfolio
+from src.external_services.google_sheets import write_to_sheets
 from src.constants.robinhood_constants import (
     RobinhoodApiData
 )
@@ -19,18 +20,17 @@ def get_rh_portfolio_as_df() -> pd.DataFrame:
 
 
 def reorder_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
-    column_list = [column.value for column in RobinhoodApiData]
-    ordered_columns = column_list + (portfolio.columns.drop(column_list).tolist())
-    portfolio = portfolio[ordered_columns]
+    column_names = [column.value.name for column in RobinhoodApiData]
+    portfolio = portfolio[portfolio.columns.intersection(column_names)]
     return portfolio
 
 
 def add_extra_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
     user_columns = AdditionalColumns(portfolio)
     for column in user_columns.get_columns():
-        portfolio.insert(column.value.col_index,
-                         column.value.col_name,
-                         value=column.value.col_value)
+        portfolio.insert(column.col_index,
+                         column.col_name,
+                         value=column.col_value)
 
     return portfolio
 
@@ -50,4 +50,4 @@ def export_rh_portfolio_to_sheets():
     portfolio_df = add_extra_columns(portfolio_df)
 
     print('Writing DF to sheets')
-    # write_to_sheets(portfolio_df)
+    write_to_sheets(portfolio_df)
