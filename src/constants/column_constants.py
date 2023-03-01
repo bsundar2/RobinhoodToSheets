@@ -21,13 +21,13 @@ class AdditionalColumns:
         return [
             ColumnOrderType(
                 'total',
-                4,
+                5,
                 (
                     self.portfolio[RhData.AVG_BUY_PRICE.value.name].astype(RhData.AVG_BUY_PRICE.value.type) *
                     self.portfolio[RhData.QUANTITY.value.name].astype(RhData.QUANTITY.value.type)
                 )
             ),
-            ColumnOrderType('dividend', 5, None),
+            ColumnOrderType('dividend', 6, None),
             ColumnOrderType('dividend_per_qtr', 7, None)
             #ColumnOrderType('dividend_per_year', 8)
             #ColumnOrderType('dividend_yield', 9)

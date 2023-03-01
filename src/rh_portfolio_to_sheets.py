@@ -19,9 +19,20 @@ def get_rh_portfolio_as_df() -> pd.DataFrame:
     return portfolio_df
 
 
-def reorder_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
+def select_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
+    """
+    Function to select and order the required columns from the dataframe.
+    :param portfolio: DataFrame object
+    :return: DataFrame
+    """
+    # Select required columns
     column_names = [column.value.name for column in RobinhoodApiData]
     portfolio = portfolio[portfolio.columns.intersection(column_names)]
+
+    # Order the columns
+    ordered_columns = column_names + (portfolio.columns.drop(column_names).tolist())
+    portfolio = portfolio[ordered_columns]
+
     return portfolio
 
 
@@ -44,7 +55,7 @@ def export_rh_portfolio_to_sheets():
     portfolio_df = get_rh_portfolio_as_df()
 
     print('Reordering portfolio DF columns')
-    portfolio_df = reorder_portfolio_columns(portfolio_df)
+    portfolio_df = select_portfolio_columns(portfolio_df)
 
     print('Adding additional columns')
     portfolio_df = add_extra_columns(portfolio_df)
