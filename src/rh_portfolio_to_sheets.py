@@ -12,9 +12,11 @@ from src.constants.column_constants import AdditionalColumns
 
 
 def get_rh_portfolio_as_df() -> pd.DataFrame:
-    # Transpose to get all attributes as the columns
     portfolio_dict = get_rh_portfolio(is_live=False, write_to_mock=False)
+    # Transpose to get all attributes as the columns
     portfolio_df = pd.DataFrame(portfolio_dict).transpose()
+    # Add indexes as a separate column
+    portfolio_df = portfolio_df.reset_index(names=RobinhoodApiData.TICKER.value.name)
 
     return portfolio_df
 

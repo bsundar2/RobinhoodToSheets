@@ -26,6 +26,6 @@ def write_to_sheets(write_data: pd.DataFrame, spreadsheet_name: str = DEFAULT_SP
     print('Write to sheet')
     start = time.time()
     initialize_column_headers(worksheet)
-    worksheet.set_dataframe(write_data, (2, 1), copy_index=True, copy_head=False)
+    worksheet.set_dataframe(write_data, (2, 1), copy_index=False, copy_head=False)
     end = time.time()
     print(f'Time taken to write to the sheet: {end - start}')
