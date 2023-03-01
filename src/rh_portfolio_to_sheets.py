@@ -12,7 +12,7 @@ from src.constants.column_constants import AdditionalColumns
 
 def get_rh_portfolio_as_df() -> pd.DataFrame:
     # Transpose to get all attributes as the columns
-    portfolio_dict = get_rh_portfolio(is_live=False)
+    portfolio_dict = get_rh_portfolio(is_live=False, write_to_mock=False)
     portfolio_df = pd.DataFrame(portfolio_dict).transpose()
 
     return portfolio_df

@@ -28,7 +28,7 @@ class AdditionalColumns:
                 )
             ),
             ColumnOrderType('dividend', 5, None),
-            ColumnOrderType('dividend_per_qtr', 7)
+            ColumnOrderType('dividend_per_qtr', 7, None)
             #ColumnOrderType('dividend_per_year', 8)
             #ColumnOrderType('dividend_yield', 9)
             #ColumnOrderType('portfolio_diversity', 10)

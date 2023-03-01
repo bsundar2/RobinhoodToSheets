@@ -38,16 +38,21 @@ def login():
     return login_obj
 
 
-def get_rh_portfolio(is_live=False) -> Dict[str, Dict[str, Any]]:
+def get_rh_portfolio(is_live=False, write_to_mock=False) -> Dict[str, Dict[str, Any]]:
     if is_live:
         login()
 
         start = time.time()
         print('Sending request to get current portfolio.')
-        my_stocks = rh.build_holdings()
+        my_stocks = rh.build_holdings(with_dividends=True)
         print('Successfully retrieved current portfolio.')
         end = time.time()
         print(f'Time taken to fetch portfolio: {end - start}')
+
+        if write_to_mock:
+            print('Writing portfolio to mock holdings file')
+            with open('data/mock_holdings.json', 'w') as mock_holding_file:
+                json.dump(my_stocks, mock_holding_file)
 
         print(my_stocks)
         return my_stocks
