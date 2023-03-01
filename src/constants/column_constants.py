@@ -40,34 +40,38 @@ class AdditionalColumns:
             ColumnOrderType(
                 ColumnNames.DVD_PER_QTR.value,
                 8,
-                where(
-                    self.portfolio[RhData.TICKER.value.name].map(lambda ticker: ticker in MONTHLY_DIVIDEND_TICKERS),
-                    self.portfolio[RhData.DIVIDEND_PER_PERIOD.value.name].astype(
-                        RhData.DIVIDEND_PER_PERIOD.value.type) * 3,
-                    self.portfolio[RhData.DIVIDEND_PER_PERIOD.value.name].astype(RhData.DIVIDEND_PER_PERIOD.value.type)
-                )
+                self.__construct_dividend_formula(3, 1)
             ),
             ColumnOrderType(
                 ColumnNames.DVD_PER_YEAR.value,
                 9,
-                self.portfolio[ColumnNames.DVD_PER_QTR.value].astype(float) * 4
+                self.__construct_dividend_formula(12, 4)
             ),
             ColumnOrderType(
                 ColumnNames.DVD_YIELD.value,
                 10,
                 (
                     (
-                        self.portfolio[ColumnNames.DVD_PER_YEAR.value].astype(float) /
+                        self.__construct_dividend_formula(12, 4) /
                         self.portfolio[RhData.QUANTITY.value.name].astype(RhData.QUANTITY.value.type)
                     ) / self.portfolio[RhData.AVG_BUY_PRICE.value.name].astype(RhData.AVG_BUY_PRICE.value.type)
                 )
             ),
-            ColumnOrderType(
-                ColumnNames.DIVERSITY.name,
-                11,
-                self.portfolio[ColumnNames.TOTAL.value].astype(float) / self.portfolio[ColumnNames.TOTAL.value].sum()
-            )
+            # ColumnOrderType(
+            #     ColumnNames.DIVERSITY.name,
+            #     11,
+            #     self.portfolio[ColumnNames.TOTAL.value].astype(float) / self.portfolio[ColumnNames.TOTAL.value].sum()
+            # )
         ]
 
     def get_columns(self):
         return self.columns
+
+    def __construct_dividend_formula(self, monthly_multiplier: int, quarterly_multiplier: int) -> ndarray:
+        return where(
+            self.portfolio[RhData.TICKER.value.name].map(lambda ticker: ticker in MONTHLY_DIVIDEND_TICKERS),
+            self.portfolio[RhData.DIVIDEND_PER_PERIOD.value.name].astype(
+                RhData.DIVIDEND_PER_PERIOD.value.type) * monthly_multiplier,
+            self.portfolio[RhData.DIVIDEND_PER_PERIOD.value.name].astype(
+                RhData.DIVIDEND_PER_PERIOD.value.type) * quarterly_multiplier
+        )
