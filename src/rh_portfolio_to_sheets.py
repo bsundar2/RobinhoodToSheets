@@ -40,11 +40,7 @@ def select_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
 
 def add_extra_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
     user_columns = AdditionalColumns(portfolio)
-    for column in user_columns.get_columns():
-        portfolio.insert(column.col_index,
-                         column.col_name,
-                         value=column.col_value)
-
+    portfolio = user_columns.add_df_columns()
     return portfolio
 
 
