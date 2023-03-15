@@ -9,7 +9,7 @@ from src.constants.robinhood_constants import (
     RobinhoodApiData,
     RobinhoodProductTypes
 )
-from src.constants.column_constants import AdditionalColumns
+from src.constants.column_constants import AdditionalColumns, ColumnNames
 
 
 def get_rh_portfolio_as_df() -> pd.DataFrame:
@@ -61,6 +61,9 @@ def export_rh_portfolio_to_sheets():
 
     print('Adding additional columns')
     portfolio_df = add_extra_columns(portfolio_df)
+
+    print('Sort dataframe by total invested')
+    portfolio_df = portfolio_df.sort_values(by=[ColumnNames.TOTAL.value.name], ascending=False)
 
     print('Writing DF to sheets')
     write_to_sheets(portfolio_df)
