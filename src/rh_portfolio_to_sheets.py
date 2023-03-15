@@ -6,7 +6,8 @@ import pandas as pd
 from src.external_services.robinhood import get_rh_portfolio
 from src.external_services.google_sheets import write_to_sheets
 from src.constants.robinhood_constants import (
-    RobinhoodApiData
+    RobinhoodApiData,
+    RobinhoodProductTypes
 )
 from src.constants.column_constants import AdditionalColumns
 
@@ -51,6 +52,9 @@ def export_rh_portfolio_to_sheets():
     """
     print('Getting RH portfolio as dataframe')
     portfolio_df = get_rh_portfolio_as_df()
+
+    print('Filter out non-equity rows')
+    portfolio_df = portfolio_df[portfolio_df[RobinhoodApiData.TYPE.value.name] != RobinhoodProductTypes.ETP.value]
 
     print('Reordering portfolio DF columns')
     portfolio_df = select_portfolio_columns(portfolio_df)
