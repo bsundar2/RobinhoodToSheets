@@ -62,7 +62,7 @@ def export_rh_portfolio_to_sheets():
     print('Adding additional columns')
     portfolio_df = add_extra_columns(portfolio_df)
 
-    print('Sort dataframe by total invested')
+    print('Sort DF by total invested')
     portfolio_df = portfolio_df.sort_values(by=[ColumnNames.TOTAL.value.name], ascending=False)
 
     print('Writing DF to sheets')
