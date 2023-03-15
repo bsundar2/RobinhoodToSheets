@@ -1,19 +1,17 @@
 from enum import Enum
+from collections import namedtuple
 from pandas import DataFrame
-from numpy import where, ndarray
 
 from src.constants.robinhood_constants import (
-    RobinhoodApiData as RhData,
-    MONTHLY_DIVIDEND_TICKERS
+    RobinhoodApiData as RhData
 )
+
+ColumnNameDataType = namedtuple('ColumnNameDataType', field_names=['name', 'type', 'visible'])
 
 
 class ColumnNames(Enum):
-    TOTAL = 'total'
-    DVD_PER_QTR = 'dividend_per_qtr'
-    DVD_PER_YEAR = 'dividend_per_year'
-    DVD_YIELD = 'dividend_yield'
-    DIVERSITY = 'portfolio_diversity'
+    TOTAL = ColumnNameDataType(name='total', type='float', visible=True)
+    DIVERSITY = ColumnNameDataType(name='portfolio_diversity', type='float', visible=True)
 
 
 class AdditionalColumns:
@@ -23,16 +21,19 @@ class AdditionalColumns:
     def add_df_columns(self):
         self.portfolio.insert(
             5,
-            ColumnNames.TOTAL.value,
+            ColumnNames.TOTAL.value.name,
             (
                 self.portfolio[RhData.AVG_BUY_PRICE.value.name].astype(RhData.AVG_BUY_PRICE.value.type) *
                 self.portfolio[RhData.QUANTITY.value.name].astype(RhData.QUANTITY.value.type)
             )
         )
         self.portfolio.insert(
-            9,
-            ColumnNames.DIVERSITY.name,
-            self.portfolio[ColumnNames.TOTAL.value].astype(float) / self.portfolio[ColumnNames.TOTAL.value].sum()
+            len(self.portfolio.columns),
+            ColumnNames.DIVERSITY.value.name,
+            (
+                    self.portfolio[ColumnNames.TOTAL.value.name].astype(float) /
+                    self.portfolio[ColumnNames.TOTAL.value.name].sum()
+            )
         )
 
         return self.portfolio

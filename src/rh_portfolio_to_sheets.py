@@ -29,7 +29,7 @@ def select_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
     :return: DataFrame
     """
     # Select required columns
-    column_names = [column.value.name for column in RobinhoodApiData]
+    column_names = [column.value.name for column in RobinhoodApiData if column.value.visible]
     portfolio = portfolio[portfolio.columns.intersection(column_names)]
 
     # Order the columns
