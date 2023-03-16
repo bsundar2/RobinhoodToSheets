@@ -65,5 +65,8 @@ def export_rh_portfolio_to_sheets():
     print('Sort DF by total invested')
     portfolio_df = portfolio_df.sort_values(by=[ColumnNames.TOTAL.value.name], ascending=False)
 
+    print('Replace NaN with 0 across DF')
+    portfolio_df = portfolio_df.fillna(0)
+
     print('Writing DF to sheets')
     write_to_sheets(portfolio_df)
