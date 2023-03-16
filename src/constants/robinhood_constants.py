@@ -16,7 +16,7 @@ MONTHLY_DIVIDEND_TICKERS = {
 }
 
 # RH specific types
-RobinhoodDataType = namedtuple('RobinhoodDataType', field_names=['name', 'type', 'visible'])
+RobinhoodDataType = namedtuple('RobinhoodDataType', field_names=['name', 'type'])
 
 
 @dataclass
@@ -29,16 +29,15 @@ class RobinhoodCredentials:
 class RobinhoodProductTypes(Enum):
     STOCK = 'stock'
     ETP = 'etp'
-    ADR = 'adr'
 
 
 class RobinhoodApiData(Enum):
     """
     Ordering of columns is implicit in this class.
     """
-    TICKER = RobinhoodDataType(name='ticker', type=str, visible=True)
-    NAME = RobinhoodDataType(name='name', type=str, visible=True)
-    AVG_BUY_PRICE = RobinhoodDataType(name='average_buy_price', type=float, visible=True)
-    QUANTITY = RobinhoodDataType(name='quantity', type=float, visible=True)
-    TYPE = RobinhoodDataType(name='type', type=str, visible=False)
-    TOTAL_DIVIDEND = RobinhoodDataType(name='total_dividend', type=float, visible=True)
+    TICKER = RobinhoodDataType(name='ticker', type=str)
+    NAME = RobinhoodDataType(name='name', type=str)
+    AVG_BUY_PRICE = RobinhoodDataType(name='average_buy_price', type=float)
+    QUANTITY = RobinhoodDataType(name='quantity', type=float)
+    TYPE = RobinhoodDataType(name='type', type=str)
+    TOTAL_DIVIDEND = RobinhoodDataType(name='total_dividend', type=float)

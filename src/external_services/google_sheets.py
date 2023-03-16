@@ -4,20 +4,21 @@ import time
 
 from src.constants.gsheets_constants import (
     DEFAULT_SPREADSHEET_NAME,
-    RH_STOCK_DUMP_SHEET_NAME,
     SHEETS_AUTHENTICATION_FILE
 )
 from src.constants.report_constants import SHEET_HEADERS
 
 
-def write_to_sheets(write_data: pd.DataFrame, spreadsheet_name: str = DEFAULT_SPREADSHEET_NAME):
+def write_to_sheets(write_data: pd.DataFrame,
+                    worksheet_name: str,
+                    spreadsheet_name: str = DEFAULT_SPREADSHEET_NAME):
     # Login/Authenticate
     print('Authenticating to Google Sheets')
     gc = pygsheets.authorize(service_account_file=SHEETS_AUTHENTICATION_FILE)
 
     print('Open sheet to edit')
     sheet = gc.open(spreadsheet_name)
-    worksheet = sheet.worksheet_by_title(RH_STOCK_DUMP_SHEET_NAME)
+    worksheet = sheet.worksheet_by_title(worksheet_name)
     worksheet.clear()
 
     print('Write to sheet')
