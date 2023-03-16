@@ -38,9 +38,6 @@ class RobinhoodApiData(Enum):
     """
     TICKER = RobinhoodDataType(name='ticker', type=str, visible=True)
     NAME = RobinhoodDataType(name='name', type=str, visible=True)
-    CURR_PRICE = RobinhoodDataType(name='price', type=float, visible=True)
     AVG_BUY_PRICE = RobinhoodDataType(name='average_buy_price', type=float, visible=True)
     QUANTITY = RobinhoodDataType(name='quantity', type=float, visible=True)
-    EQUITY = RobinhoodDataType(name='equity', type=float, visible=True)
     TYPE = RobinhoodDataType(name='type', type=str, visible=False)
-    PE_RATIO = RobinhoodDataType(name='pe_ratio', type=float, visible=True)

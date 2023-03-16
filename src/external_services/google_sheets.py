@@ -2,7 +2,11 @@ import pygsheets
 import pandas as pd
 import time
 
-from src.constants.gsheets_constants import DEFAULT_SPREADSHEET_NAME, SHEETS_AUTHENTICATION_FILE
+from src.constants.gsheets_constants import (
+    DEFAULT_SPREADSHEET_NAME,
+    DEFAULT_DUMP_SHEET_NAME,
+    SHEETS_AUTHENTICATION_FILE
+)
 from src.constants.report_constants import SHEET_HEADERS
 
 
@@ -13,7 +17,7 @@ def write_to_sheets(write_data: pd.DataFrame, spreadsheet_name: str = DEFAULT_SP
 
     print('Open sheet to edit')
     sheet = gc.open(spreadsheet_name)
-    worksheet = sheet[0]
+    worksheet = sheet.worksheet_by_title(DEFAULT_DUMP_SHEET_NAME)
     worksheet.clear()
 
     print('Write to sheet')

@@ -20,7 +20,7 @@ class AdditionalColumns:
 
     def add_df_columns(self):
         self.portfolio.insert(
-            5,
+            len(self.portfolio.columns),
             ColumnNames.TOTAL.value.name,
             (
                 self.portfolio[RhData.AVG_BUY_PRICE.value.name].astype(RhData.AVG_BUY_PRICE.value.type) *
