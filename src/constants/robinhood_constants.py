@@ -41,3 +41,4 @@ class RobinhoodApiData(Enum):
     AVG_BUY_PRICE = RobinhoodDataType(name='average_buy_price', type=float, visible=True)
     QUANTITY = RobinhoodDataType(name='quantity', type=float, visible=True)
     TYPE = RobinhoodDataType(name='type', type=str, visible=False)
+    TOTAL_DIVIDEND = RobinhoodDataType(name='total_dividend', type=float, visible=True)

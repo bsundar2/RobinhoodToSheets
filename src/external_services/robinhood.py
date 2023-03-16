@@ -44,7 +44,7 @@ def get_rh_portfolio(is_live=False, write_to_mock=False) -> Dict[str, Dict[str, 
 
         start = time.time()
         print('Sending request to get current portfolio.')
-        my_stocks = rh.build_holdings(with_dividends=False)
+        my_stocks = rh.build_holdings(with_dividends=True)
         print('Successfully retrieved current portfolio.')
         end = time.time()
         print(f'Time taken to fetch portfolio: {end - start}')

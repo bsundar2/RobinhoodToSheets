@@ -9,4 +9,5 @@ SHEET_HEADERS = {
     RobinhoodApiData.QUANTITY.value.name: 'Qty',
     ColumnNames.TOTAL.value.name: 'Total',
     ColumnNames.DIVERSITY.value.name: 'Diversity',
+    RobinhoodApiData.TOTAL_DIVIDEND.value.name: 'Last Dividend'
 }
