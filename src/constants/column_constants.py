@@ -6,12 +6,12 @@ from src.constants.robinhood_constants import (
     RobinhoodApiData as RhData
 )
 
-ColumnNameDataType = namedtuple('ColumnNameDataType', field_names=['name', 'type', 'visible'])
+ColumnNameDataType = namedtuple('ColumnNameDataType', field_names=['name', 'label', 'type'])
 
 
 class ColumnNames(Enum):
-    TOTAL = ColumnNameDataType(name='total', type='float', visible=True)
-    DIVERSITY = ColumnNameDataType(name='portfolio_diversity', type='float', visible=True)
+    TOTAL = ColumnNameDataType(name='total', label='Total' , type='float')
+    DIVERSITY = ColumnNameDataType(name='portfolio_diversity', label='Diversity', type='float')
 
 
 class AdditionalColumns:

@@ -3,7 +3,7 @@ import robin_stocks.robinhood as rh
 import pyotp
 import time
 import json
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 from src.constants.robinhood_constants import (
     RH_EMAIL_ENV_VAR,
@@ -60,3 +60,9 @@ def get_rh_portfolio(is_live=False, write_to_mock=False) -> Dict[str, Dict[str, 
         with open('data/mock_holdings.json', 'r') as f:
             portfolio = json.load(f)
         return portfolio
+
+
+def get_stock_fundamentals(tickers: List[str]):
+    login()
+    fundamentals = rh.get_fundamentals(tickers)
+    return fundamentals

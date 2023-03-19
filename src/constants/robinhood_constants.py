@@ -16,7 +16,7 @@ MONTHLY_DIVIDEND_TICKERS = {
 }
 
 # RH specific types
-RobinhoodDataType = namedtuple('RobinhoodDataType', field_names=['name', 'type'])
+RobinhoodDataType = namedtuple('RobinhoodDataType', field_names=['name', 'label', 'type', 'category'])
 
 
 @dataclass
@@ -31,13 +31,31 @@ class RobinhoodProductTypes(Enum):
     ETP = 'etp'
 
 
+class RobinhoodCategories(Enum):
+    PORTFOLIO = 'portfolio'
+    FUNDAMENTALS = 'fundamentals'
+
+
 class RobinhoodApiData(Enum):
-    """
-    Ordering of columns is implicit in this class.
-    """
-    TICKER = RobinhoodDataType(name='ticker', type=str)
-    NAME = RobinhoodDataType(name='name', type=str)
-    AVG_BUY_PRICE = RobinhoodDataType(name='average_buy_price', type=float)
-    QUANTITY = RobinhoodDataType(name='quantity', type=float)
-    TYPE = RobinhoodDataType(name='type', type=str)
-    TOTAL_DIVIDEND = RobinhoodDataType(name='total_dividend', type=float)
+    # Portfolio data
+    TICKER = RobinhoodDataType(name='ticker', label='Ticker', type=str, category=RobinhoodCategories.PORTFOLIO.value)
+    NAME = RobinhoodDataType(name='name',  label='Name', type=str, category=RobinhoodCategories.PORTFOLIO.value)
+    AVG_BUY_PRICE = RobinhoodDataType(name='average_buy_price', label='Avg Price', type=float,
+                                      category=RobinhoodCategories.PORTFOLIO.value)
+    QUANTITY = RobinhoodDataType(name='quantity', label='Quantity', type=float,
+                                 category=RobinhoodCategories.PORTFOLIO.value)
+    TYPE = RobinhoodDataType(name='type', label='Type', type=str, category=RobinhoodCategories.PORTFOLIO.value)
+    TOTAL_DIVIDEND = RobinhoodDataType(name='total_dividend', label='Last Dividend', type=float,
+                                       category=RobinhoodCategories.PORTFOLIO.value)
+
+    # Fundamentals data
+    HIGH_52_WK = RobinhoodDataType(name='high_52_weeks', label='52 Week High', type=float,
+                                   category=RobinhoodCategories.FUNDAMENTALS.value)
+    LOW_52_WK = RobinhoodDataType(name='low_52_weeks', label='52 Week Low', type=float,
+                                  category=RobinhoodCategories.FUNDAMENTALS.value)
+    DESCRIPTION = RobinhoodDataType(name='description', label='Description', type=str,
+                                    category=RobinhoodCategories.FUNDAMENTALS.value)
+    SECTOR = RobinhoodDataType(name='sector', label='Sector', type=str, category=RobinhoodCategories.FUNDAMENTALS.value)
+    INDUSTRY = RobinhoodDataType(name='industry', label='Industry', type=str,
+                                 category=RobinhoodCategories.FUNDAMENTALS.value)
+    SYMBOL = RobinhoodDataType(name='symbol', label='Symbol', type=str, category=RobinhoodCategories.FUNDAMENTALS.value)

@@ -2,12 +2,20 @@ from src.constants.robinhood_constants import RobinhoodApiData
 from src.constants.column_constants import ColumnNames
 
 
-SHEET_HEADERS = {
-    RobinhoodApiData.TICKER.value.name: 'Ticker',
-    RobinhoodApiData.NAME.value.name: 'Name',
-    RobinhoodApiData.AVG_BUY_PRICE.value.name: 'Avg Price',
-    RobinhoodApiData.QUANTITY.value.name: 'Qty',
-    ColumnNames.TOTAL.value.name: 'Total',
-    ColumnNames.DIVERSITY.value.name: 'Diversity',
-    RobinhoodApiData.TOTAL_DIVIDEND.value.name: 'Last Dividend'
+BASE_SHEET_HEADERS = {
+    RobinhoodApiData.TICKER.value.name: RobinhoodApiData.TICKER.value.label,
+    RobinhoodApiData.NAME.value.name: RobinhoodApiData.NAME.value.label,
+    RobinhoodApiData.AVG_BUY_PRICE.value.name: RobinhoodApiData.AVG_BUY_PRICE.value.label,
+    RobinhoodApiData.QUANTITY.value.name: RobinhoodApiData.QUANTITY.value.label,
+    ColumnNames.TOTAL.value.name: ColumnNames.TOTAL.value.label,
+    ColumnNames.DIVERSITY.value.name: ColumnNames.DIVERSITY.value.label,
+    RobinhoodApiData.TOTAL_DIVIDEND.value.name: RobinhoodApiData.TOTAL_DIVIDEND.value.label,
+}
+
+FUNDAMENTALS_HEADERS = {
+    RobinhoodApiData.HIGH_52_WK.value.name: RobinhoodApiData.HIGH_52_WK.value.label,
+    RobinhoodApiData.LOW_52_WK.value.name: RobinhoodApiData.LOW_52_WK.value.label,
+    RobinhoodApiData.DESCRIPTION.value.name: RobinhoodApiData.DESCRIPTION.value.label,
+    RobinhoodApiData.SECTOR.value.name: RobinhoodApiData.SECTOR.value.label,
+    RobinhoodApiData.INDUSTRY.value.name: RobinhoodApiData.INDUSTRY.value.label,
 }
