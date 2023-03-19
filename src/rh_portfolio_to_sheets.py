@@ -66,7 +66,6 @@ def add_fundamentals_information(portfolio: pd.DataFrame) -> pd.DataFrame:
 
 
 def add_extra_information(portfolio: pd.DataFrame, add_fundamentals=False) -> pd.DataFrame:
-
     # Calculated columns
     user_columns = AdditionalColumns(portfolio)
     portfolio = user_columns.add_df_columns()
