@@ -1,26 +1,39 @@
-from dataclasses import dataclass
-from typing import Union
+from enum import Enum
+from collections import namedtuple
+from pandas import DataFrame
 
-from pandas import Series, DataFrame
+from src.constants.robinhood_constants import (
+    RobinhoodApiData as RhData
+)
+
+ColumnNameDataType = namedtuple('ColumnNameDataType', field_names=['name', 'type', 'visible'])
 
 
-@dataclass
-class ColumnOrderType:
-    col_name: str
-    col_index: int
-    col_value: Union[Series, None]
+class ColumnNames(Enum):
+    TOTAL = ColumnNameDataType(name='total', type='float', visible=True)
+    DIVERSITY = ColumnNameDataType(name='portfolio_diversity', type='float', visible=True)
 
 
 class AdditionalColumns:
     def __init__(self, portfolio: DataFrame):
         self.portfolio = portfolio
 
-    def get_columns(self):
-        return [
-            ColumnOrderType('total', 4, self.portfolio['average_buy_price'].astype(float) * self.portfolio['quantity'].astype(float)),
-            ColumnOrderType('dividend', 5, None),
-            ColumnOrderType('dividend_per_qtr', 7)
-            #ColumnOrderType('dividend_per_year', 8)
-            #ColumnOrderType('dividend_yield', 9)
-            #ColumnOrderType('portfolio_diversity', 10)
-        ]
+    def add_df_columns(self):
+        self.portfolio.insert(
+            len(self.portfolio.columns),
+            ColumnNames.TOTAL.value.name,
+            (
+                self.portfolio[RhData.AVG_BUY_PRICE.value.name].astype(RhData.AVG_BUY_PRICE.value.type) *
+                self.portfolio[RhData.QUANTITY.value.name].astype(RhData.QUANTITY.value.type)
+            )
+        )
+        self.portfolio.insert(
+            len(self.portfolio.columns),
+            ColumnNames.DIVERSITY.value.name,
+            (
+                    self.portfolio[ColumnNames.TOTAL.value.name].astype(float) /
+                    self.portfolio[ColumnNames.TOTAL.value.name].sum()
+            )
+        )
+
+        return self.portfolio

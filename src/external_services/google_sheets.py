@@ -1,29 +1,30 @@
 import pygsheets
 import pandas as pd
+import time
 
-from src.constants.robinhood_constants import (
+from src.constants.gsheets_constants import (
     DEFAULT_SPREADSHEET_NAME,
-    SheetHeaders
+    SHEETS_AUTHENTICATION_FILE
 )
+from src.constants.report_constants import SHEET_HEADERS
 
 
-def initialize_column_headers(worksheet: pygsheets.Worksheet) -> None:
-    for idx, item in enumerate(SheetHeaders):
-        cell = pygsheets.Cell((1, idx + 1), worksheet=worksheet)
-        cell.set_text_format('bold', True)
-        cell.set_value(item.col_value)
-
-
-def write_to_sheets(write_data: pd.DataFrame, spreadsheet_name: str = DEFAULT_SPREADSHEET_NAME):
+def write_to_sheets(write_data: pd.DataFrame,
+                    worksheet_name: str,
+                    spreadsheet_name: str = DEFAULT_SPREADSHEET_NAME):
     # Login/Authenticate
     print('Authenticating to Google Sheets')
-    gc = pygsheets.authorize(service_account_file='data/gsheets_authentication.json')
+    gc = pygsheets.authorize(service_account_file=SHEETS_AUTHENTICATION_FILE)
 
     print('Open sheet to edit')
     sheet = gc.open(spreadsheet_name)
-    worksheet = sheet[0]
+    worksheet = sheet.worksheet_by_title(worksheet_name)
     worksheet.clear()
 
     print('Write to sheet')
-    initialize_column_headers(worksheet)
-    worksheet.set_dataframe(write_data, (2, 1), copy_index=True, copy_head=False)
+    start = time.time()
+    # Initialize column headers
+    write_data = write_data.rename(columns=SHEET_HEADERS)
+    worksheet.set_dataframe(write_data, (1, 1), copy_index=False, copy_head=True)
+    end = time.time()
+    print(f'Time taken to write to the sheet: {end - start}')
