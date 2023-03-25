@@ -4,6 +4,7 @@ import pyotp
 import time
 import json
 from typing import Dict, Any, List
+from functools import cache
 
 from src.constants.robinhood_constants import (
     RH_EMAIL_ENV_VAR,
@@ -26,7 +27,8 @@ def get_credentials() -> RobinhoodCredentials:
     return RobinhoodCredentials(rh_email, rh_password, rh_otp_key)
 
 
-def login():
+@cache
+def login() -> Dict[str, Any]:
     credentials = get_credentials()
 
     totp = pyotp.TOTP(credentials.otp_key).now()
@@ -62,7 +64,14 @@ def get_rh_portfolio(is_live=False, write_to_mock=False) -> Dict[str, Dict[str, 
         return portfolio
 
 
-def get_stock_fundamentals(tickers: List[str]):
+def get_stock_fundamentals(tickers: List[str]) -> List[Dict[str, Any]]:
     login()
     fundamentals = rh.get_fundamentals(tickers)
+    rh.get_dividends_by_instrument()
     return fundamentals
+
+
+def get_dividends() -> List[Dict[str, Any]]:
+    login()
+    dividends = rh.get_dividends()
+    return dividends
