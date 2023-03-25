@@ -13,8 +13,6 @@ BASE_SHEET_HEADERS = {
 }
 
 FUNDAMENTALS_HEADERS = {
-    RobinhoodApiData.HIGH_52_WK.value.name: RobinhoodApiData.HIGH_52_WK.value.label,
-    RobinhoodApiData.LOW_52_WK.value.name: RobinhoodApiData.LOW_52_WK.value.label,
     RobinhoodApiData.DESCRIPTION.value.name: RobinhoodApiData.DESCRIPTION.value.label,
     RobinhoodApiData.SECTOR.value.name: RobinhoodApiData.SECTOR.value.label,
     RobinhoodApiData.INDUSTRY.value.name: RobinhoodApiData.INDUSTRY.value.label,

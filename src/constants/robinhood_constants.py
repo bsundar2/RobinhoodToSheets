@@ -49,10 +49,6 @@ class RobinhoodApiData(Enum):
                                        category=RobinhoodCategories.PORTFOLIO.value)
 
     # Fundamentals data
-    HIGH_52_WK = RobinhoodDataType(name='high_52_weeks', label='52 Week High', type=float,
-                                   category=RobinhoodCategories.FUNDAMENTALS.value)
-    LOW_52_WK = RobinhoodDataType(name='low_52_weeks', label='52 Week Low', type=float,
-                                  category=RobinhoodCategories.FUNDAMENTALS.value)
     DESCRIPTION = RobinhoodDataType(name='description', label='Description', type=str,
                                     category=RobinhoodCategories.FUNDAMENTALS.value)
     SECTOR = RobinhoodDataType(name='sector', label='Sector', type=str, category=RobinhoodCategories.FUNDAMENTALS.value)
