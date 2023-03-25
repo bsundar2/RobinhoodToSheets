@@ -26,6 +26,13 @@ class RobinhoodCredentials:
     otp_key: str
 
 
+class RobinhoodDividendStatus(Enum):
+    VOIDED = 'voided'
+    PENDING = 'pending'
+    REINVESTED = 'reinvested'
+    PAID = 'paid'
+
+
 class RobinhoodProductTypes(Enum):
     STOCK = 'stock'
     ETP = 'etp'
@@ -34,9 +41,15 @@ class RobinhoodProductTypes(Enum):
 class RobinhoodCategories(Enum):
     PORTFOLIO = 'portfolio'
     FUNDAMENTALS = 'fundamentals'
+    ID = 'id'
+    DIVIDEND = 'dividend'
 
 
 class RobinhoodApiData(Enum):
+    # ID Data
+    INSTRUMENT = RobinhoodDataType(name='instrument', label='Instrument URL', type=str,
+                                   category=RobinhoodCategories.ID.value)
+
     # Portfolio data
     TICKER = RobinhoodDataType(name='ticker', label='Ticker', type=str, category=RobinhoodCategories.PORTFOLIO.value)
     NAME = RobinhoodDataType(name='name',  label='Name', type=str, category=RobinhoodCategories.PORTFOLIO.value)
@@ -45,8 +58,6 @@ class RobinhoodApiData(Enum):
     QUANTITY = RobinhoodDataType(name='quantity', label='Quantity', type=float,
                                  category=RobinhoodCategories.PORTFOLIO.value)
     TYPE = RobinhoodDataType(name='type', label='Type', type=str, category=RobinhoodCategories.PORTFOLIO.value)
-    TOTAL_DIVIDEND = RobinhoodDataType(name='total_dividend', label='Last Dividend', type=float,
-                                       category=RobinhoodCategories.PORTFOLIO.value)
 
     # Fundamentals data
     DESCRIPTION = RobinhoodDataType(name='description', label='Description', type=str,
@@ -55,3 +66,10 @@ class RobinhoodApiData(Enum):
     INDUSTRY = RobinhoodDataType(name='industry', label='Industry', type=str,
                                  category=RobinhoodCategories.FUNDAMENTALS.value)
     SYMBOL = RobinhoodDataType(name='symbol', label='Symbol', type=str, category=RobinhoodCategories.FUNDAMENTALS.value)
+
+    # Dividend data
+    DVD_STATUS = RobinhoodDataType(name='state', label='DVD Status', type=str,
+                                   category=RobinhoodCategories.DIVIDEND.value)
+    PAYABLE_DATE = RobinhoodDataType(name='payable_date', label='Dividend Date', type=str,
+                                     category=RobinhoodCategories.DIVIDEND.value)
+

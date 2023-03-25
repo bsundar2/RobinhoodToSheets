@@ -6,7 +6,7 @@ import json
 from typing import Dict, Any, List
 from functools import cache
 
-from src.constants.robinhood_constants import (
+from src.constants.robinhood import (
     RH_EMAIL_ENV_VAR,
     RH_PASSWORD_ENV_VAR,
     RH_OTP_KEY_ENV_VAR,
@@ -67,7 +67,6 @@ def get_rh_portfolio(is_live=False, write_to_mock=False) -> Dict[str, Dict[str, 
 def get_stock_fundamentals(tickers: List[str]) -> List[Dict[str, Any]]:
     login()
     fundamentals = rh.get_fundamentals(tickers)
-    rh.get_dividends_by_instrument()
     return fundamentals
 
 

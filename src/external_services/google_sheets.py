@@ -2,11 +2,10 @@ import pygsheets
 import pandas as pd
 import time
 
-from src.constants.gsheets_constants import (
+from src.constants.gsheets import (
     DEFAULT_SPREADSHEET_NAME,
     SHEETS_AUTHENTICATION_FILE
 )
-from src.constants.report_constants import BASE_SHEET_HEADERS
 
 
 def write_to_sheets(write_data: pd.DataFrame,

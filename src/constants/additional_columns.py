@@ -2,7 +2,7 @@ from enum import Enum
 from collections import namedtuple
 from pandas import DataFrame
 
-from src.constants.robinhood_constants import (
+from src.constants.robinhood import (
     RobinhoodApiData as RhData
 )
 
