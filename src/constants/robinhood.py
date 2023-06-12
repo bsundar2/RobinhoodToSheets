@@ -72,4 +72,9 @@ class RobinhoodApiData(Enum):
                                    category=RobinhoodCategories.DIVIDEND.value)
     PAYABLE_DATE = RobinhoodDataType(name='payable_date', label='Dividend Date', type=str,
                                      category=RobinhoodCategories.DIVIDEND.value)
-
+    DVD_RATE = RobinhoodDataType(name='dividend_rate', label='DVD Rate', type=float,
+                                 category=RobinhoodCategories.DIVIDEND.value)
+    DIVIDEND = RobinhoodDataType(name='total_dividend', label='Dividend', type=float,
+                                  category=RobinhoodCategories.DIVIDEND.value)
+    TOTAL_DVD_AMT_PAID = RobinhoodDataType(name='amount_paid_to_date', label='Total DVD Paid', type=float,
+                                           category=RobinhoodCategories.DIVIDEND.value)

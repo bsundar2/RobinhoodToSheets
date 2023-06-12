@@ -18,5 +18,7 @@ FUNDAMENTALS_HEADERS = {
 }
 
 DIVIDEND_HEADERS = {
-
+    RobinhoodApiData.DVD_RATE.value.name: RobinhoodApiData.DVD_RATE.value.label,
+    RobinhoodApiData.DIVIDEND.value.name: RobinhoodApiData.DIVIDEND.value.label,
+    RobinhoodApiData.TOTAL_DVD_AMT_PAID.value.name: RobinhoodApiData.TOTAL_DVD_AMT_PAID.value.label
 }
