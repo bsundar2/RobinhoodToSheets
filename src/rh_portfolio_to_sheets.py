@@ -16,7 +16,8 @@ from src.external_services.google_sheets import write_to_sheets
 from src.constants.robinhood import (
     RobinhoodApiData,
     RobinhoodProductTypes,
-    RobinhoodDividendStatus
+    RobinhoodDividendStatus,
+    RobinhoodCategories
 )
 from src.constants.additional_columns import AdditionalColumns, ColumnNames
 from src.constants.report import (
@@ -106,6 +107,11 @@ def add_dividend_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     portfolio = portfolio.merge(dividend_df,
                                 how=DataFrameMergeType.LEFT.value,
                                 on=RobinhoodApiData.INSTRUMENT.value.name)
+
+    # Replace NaN with 0 for dividend columns
+    for column in RobinhoodApiData:
+        if column.value.category == RobinhoodCategories.DIVIDEND.value and column.value.type == float:
+            portfolio[column.value.name] = portfolio[column.value.name].fillna(0)
 
     return portfolio
 
