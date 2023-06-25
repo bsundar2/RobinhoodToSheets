@@ -31,8 +31,8 @@ from src.constants.gsheets import (
 )
 
 
-def get_rh_portfolio_as_df() -> pd.DataFrame:
-    portfolio_dict = get_rh_portfolio(is_live=False, write_to_mock=False)
+def get_rh_portfolio_as_df(is_live=False, write_mock=False) -> pd.DataFrame:
+    portfolio_dict = get_rh_portfolio(is_live=is_live, write_to_mock=write_mock)
     # Transpose to get all attributes as the columns
     portfolio_df = pd.DataFrame(portfolio_dict).transpose()
     # Add indexes as a separate column
@@ -151,13 +151,15 @@ def write_required_columns(portfolio: pd.DataFrame, worksheet_name: str):
     write_to_sheets(portfolio, worksheet_name)
 
 
-def export_rh_portfolio_to_sheets():
+def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
     """
     Driver function to get user's portfolio from Robinhood and write it to a Google sheet.
+    :param is_live: Boolean to control whether portfolio data is fetched from Robinhood or mock file
+    :param write_mock: Boolean to control whether portfolio data is writtem to mock file
     :return:
     """
     print('Getting RH portfolio as dataframe')
-    portfolio_df = get_rh_portfolio_as_df()
+    portfolio_df = get_rh_portfolio_as_df(is_live, write_mock)
 
     print('Replace NaN with 0 across DF')
     portfolio_df = portfolio_df.fillna(0)
