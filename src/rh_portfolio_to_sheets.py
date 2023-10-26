@@ -159,9 +159,12 @@ def add_fundamentals_information(portfolio: pd.DataFrame) -> pd.DataFrame:
 
 
 def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
-    # Calculated columns
+    # Calculated total and diversity columns
     user_columns = AdditionalColumns(portfolio)
-    portfolio = user_columns.add_df_columns()
+    portfolio = user_columns.add_total_column()
+
+    user_columns = AdditionalColumns(portfolio)
+    portfolio = user_columns.add_diversity_column()
 
     # Additional information
     print("Getting fundamentals data")
@@ -169,6 +172,10 @@ def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
 
     print("Getting dividend data")
     portfolio = add_dividend_information(portfolio)
+
+    # Calculated projected dividend column
+    user_columns = AdditionalColumns(portfolio)
+    portfolio = user_columns.add_projected_dividend_column()
 
     return portfolio
 

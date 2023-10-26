@@ -21,4 +21,5 @@ DIVIDEND_HEADERS = {
     RobinhoodApiData.DVD_RATE.value.name: RobinhoodApiData.DVD_RATE.value.label,
     RobinhoodApiData.LAST_DIVIDEND.value.name: RobinhoodApiData.LAST_DIVIDEND.value.label,
     RobinhoodApiData.TOTAL_DVD_AMT_PAID.value.name: RobinhoodApiData.TOTAL_DVD_AMT_PAID.value.label,
+    ColumnNames.PROJECTED_DVD.value.name: ColumnNames.PROJECTED_DVD.value.label,
 }

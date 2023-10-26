@@ -14,13 +14,19 @@ class ColumnNames(Enum):
     DIVERSITY = ColumnNameDataType(
         name="portfolio_diversity", label="Diversity", type="float"
     )
+    PROJECTED_DVD = ColumnNameDataType(
+        name="projected_dvd", label="Projected DVD", type="float"
+    )
 
 
 class AdditionalColumns:
     def __init__(self, portfolio: DataFrame):
         self.portfolio = portfolio
 
-    def add_df_columns(self):
+    def add_total_column(self) -> DataFrame:
+        """
+        Function to calculate and add the total value of a holding.
+        """
         self.portfolio.insert(
             len(self.portfolio.columns),
             ColumnNames.TOTAL.value.name,
@@ -33,6 +39,12 @@ class AdditionalColumns:
                 )
             ),
         )
+        return self.portfolio
+
+    def add_diversity_column(self) -> DataFrame:
+        """
+        Function to calculate and add portfolio diversity.
+        """
         self.portfolio.insert(
             len(self.portfolio.columns),
             ColumnNames.DIVERSITY.value.name,
@@ -41,5 +53,22 @@ class AdditionalColumns:
                 / self.portfolio[ColumnNames.TOTAL.value.name].sum()
             ),
         )
+        return self.portfolio
 
+    def add_projected_dividend_column(self) -> DataFrame:
+        """
+        Function to calculate and add the projected dividend.
+        """
+        self.portfolio.insert(
+            len(self.portfolio.columns),
+            ColumnNames.PROJECTED_DVD.value.name,
+            (
+                self.portfolio[RhData.DVD_RATE.value.name].astype(
+                    RhData.DVD_RATE.value.type
+                )
+                * self.portfolio[RhData.QUANTITY.value.name].astype(
+                    RhData.QUANTITY.value.type
+                )
+            ),
+        )
         return self.portfolio
