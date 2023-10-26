@@ -10,20 +10,20 @@ from pandas.core.computation.ops import Div
 from src.external_services.robinhood import (
     get_rh_portfolio,
     get_stock_fundamentals,
-    get_dividends
+    get_dividends,
 )
 from src.external_services.google_sheets import write_to_sheets
 from src.constants.robinhood import (
     RobinhoodApiData,
     RobinhoodProductTypes,
     RobinhoodDividendStatus,
-    RobinhoodCategories
+    RobinhoodCategories,
 )
 from src.constants.additional_columns import AdditionalColumns, ColumnNames
 from src.constants.report import (
     BASE_SHEET_HEADERS,
     FUNDAMENTALS_HEADERS,
-    DIVIDEND_HEADERS
+    DIVIDEND_HEADERS,
 )
 from src.constants.common import DataFrameMergeType
 from src.constants.gsheets import (
@@ -81,7 +81,10 @@ def get_dividend_history() -> pd.DataFrame:
     df = pd.DataFrame(dividends)
 
     # Filter out voided dividends
-    df = df[df[RobinhoodApiData.DVD_STATUS.value.name] != RobinhoodDividendStatus.VOIDED.value]
+    df = df[
+        df[RobinhoodApiData.DVD_STATUS.value.name]
+        != RobinhoodDividendStatus.VOIDED.value
+    ]
     return df
 
 
@@ -95,22 +98,29 @@ def add_dividend_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     dividend_df[RobinhoodApiData.PAYABLE_DATE.value.name] = pd.to_datetime(
         dividend_df[RobinhoodApiData.PAYABLE_DATE.value.name]
     )
-    dividend_df = dividend_df.sort_values(by=RobinhoodApiData.PAYABLE_DATE.value.name,
-                                          ascending=False)
+    dividend_df = dividend_df.sort_values(
+        by=RobinhoodApiData.PAYABLE_DATE.value.name, ascending=False
+    )
 
     # Group by ticker name
-    dividend_groups = dividend_df.groupby(by=RobinhoodApiData.INSTRUMENT.value.name,
-                                          as_index=False)
+    dividend_groups = dividend_df.groupby(
+        by=RobinhoodApiData.INSTRUMENT.value.name, as_index=False
+    )
     dividend_df = dividend_groups.first()
 
     # Merge into portfolio
-    portfolio = portfolio.merge(dividend_df,
-                                how=DataFrameMergeType.LEFT.value,
-                                on=RobinhoodApiData.INSTRUMENT.value.name)
+    portfolio = portfolio.merge(
+        dividend_df,
+        how=DataFrameMergeType.LEFT.value,
+        on=RobinhoodApiData.INSTRUMENT.value.name,
+    )
 
     # Replace NaN with 0 for dividend columns
     for column in RobinhoodApiData:
-        if column.value.category == RobinhoodCategories.DIVIDEND.value and column.value.type == float:
+        if (
+            column.value.category == RobinhoodCategories.DIVIDEND.value
+            and column.value.type == float
+        ):
             portfolio[column.value.name] = portfolio[column.value.name].fillna(0)
 
     return portfolio
@@ -121,10 +131,12 @@ def add_fundamentals_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     fundamentals = get_stock_fundamentals(tickers)
 
     df = pd.DataFrame(fundamentals)
-    portfolio = portfolio.merge(df,
-                                how=DataFrameMergeType.INNER.value,
-                                left_on=RobinhoodApiData.TICKER.value.name,
-                                right_on=RobinhoodApiData.SYMBOL.value.name)
+    portfolio = portfolio.merge(
+        df,
+        how=DataFrameMergeType.INNER.value,
+        left_on=RobinhoodApiData.TICKER.value.name,
+        right_on=RobinhoodApiData.SYMBOL.value.name,
+    )
     return portfolio
 
 
@@ -134,24 +146,23 @@ def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     portfolio = user_columns.add_df_columns()
 
     # Additional information
-    print('Getting fundamentals data')
+    print("Getting fundamentals data")
     portfolio = add_fundamentals_information(portfolio)
 
-    print('Getting dividend data')
+    print("Getting dividend data")
     portfolio = add_dividend_information(portfolio)
 
     return portfolio
 
 
 def write_required_columns(portfolio: pd.DataFrame, worksheet_name: str):
-    print('Adding additional columns and information')
+    print("Adding additional columns and information")
     portfolio = add_extra_information(portfolio)
 
-    print('Sorting values by total invested')
-    portfolio = portfolio.sort_values(by=ColumnNames.TOTAL.value.name,
-                                      ascending=False)
+    print("Sorting values by total invested")
+    portfolio = portfolio.sort_values(by=ColumnNames.TOTAL.value.name, ascending=False)
 
-    print('Dropping columns that are not required')
+    print("Dropping columns that are not required")
     portfolio = select_portfolio_columns(portfolio)
 
     write_to_sheets(portfolio, worksheet_name)
@@ -164,18 +175,24 @@ def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
     :param write_mock: Boolean to control whether portfolio data is writtem to mock file
     :return:
     """
-    print('Getting RH portfolio as dataframe')
+    print("Getting RH portfolio as dataframe")
     portfolio_df = get_rh_portfolio_as_df(is_live, write_mock)
 
-    print('Replace NaN with 0 across DF')
+    print("Replace NaN with 0 across DF")
     portfolio_df = portfolio_df.fillna(0)
 
-    print('Filter data based on type')
-    stock_portfolio_df = portfolio_df[portfolio_df[RobinhoodApiData.TYPE.value.name] != RobinhoodProductTypes.ETP.value]
-    etf_portfolio_df = portfolio_df[portfolio_df[RobinhoodApiData.TYPE.value.name] == RobinhoodProductTypes.ETP.value]
+    print("Filter data based on type")
+    stock_portfolio_df = portfolio_df[
+        portfolio_df[RobinhoodApiData.TYPE.value.name]
+        != RobinhoodProductTypes.ETP.value
+    ]
+    etf_portfolio_df = portfolio_df[
+        portfolio_df[RobinhoodApiData.TYPE.value.name]
+        == RobinhoodProductTypes.ETP.value
+    ]
 
-    print('Writing stock portfolio to sheets')
+    print("Writing stock portfolio to sheets")
     write_required_columns(stock_portfolio_df, worksheet_name=RH_STOCK_DUMP_SHEET_NAME)
 
-    print('Writing ETF portfolio to sheets')
+    print("Writing ETF portfolio to sheets")
     write_required_columns(etf_portfolio_df, worksheet_name=RH_ETF_DUMP_SHEET_NAME)
