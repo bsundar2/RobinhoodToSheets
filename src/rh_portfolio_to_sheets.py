@@ -18,6 +18,7 @@ from src.constants.robinhood import (
     RobinhoodProductTypes,
     RobinhoodDividendStatus,
     RobinhoodCategories,
+    MONTHLY_DIVIDEND_TICKERS,
 )
 from src.constants.additional_columns import AdditionalColumns, ColumnNames
 from src.constants.report import (
@@ -25,7 +26,7 @@ from src.constants.report import (
     FUNDAMENTALS_HEADERS,
     DIVIDEND_HEADERS,
 )
-from src.constants.common import DataFrameMergeType
+from src.constants.common import DataFrameMergeType, MONTHS_IN_QUARTER
 from src.constants.gsheets import (
     RH_STOCK_DUMP_SHEET_NAME,
     RH_ETF_DUMP_SHEET_NAME,
@@ -122,6 +123,23 @@ def add_dividend_information(portfolio: pd.DataFrame) -> pd.DataFrame:
             and column.value.type == float
         ):
             portfolio[column.value.name] = portfolio[column.value.name].fillna(0)
+
+    # Update dividend for monthly payout stocks
+    portfolio.loc[
+        portfolio[RobinhoodApiData.TICKER.value.name].isin(MONTHLY_DIVIDEND_TICKERS),
+        [
+            RobinhoodApiData.DVD_RATE.value.name,
+            RobinhoodApiData.LAST_DIVIDEND.value.name,
+        ],
+    ] = portfolio.loc[
+        portfolio[RobinhoodApiData.TICKER.value.name].isin(MONTHLY_DIVIDEND_TICKERS),
+        [
+            RobinhoodApiData.DVD_RATE.value.name,
+            RobinhoodApiData.LAST_DIVIDEND.value.name,
+        ],
+    ].apply(
+        lambda x: x.astype(float) * MONTHS_IN_QUARTER
+    )
 
     return portfolio
 

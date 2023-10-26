@@ -9,7 +9,7 @@ RH_OTP_KEY_ENV_VAR = "RH_OTP_KEY"
 
 
 # RH ticker exceptions
-MONTHLY_DIVIDEND_TICKERS = {"LAND", "O", "SPHD"}
+MONTHLY_DIVIDEND_TICKERS = {"STAG", "O", "LAND"}
 
 # RH specific types
 RobinhoodDataType = namedtuple(
@@ -129,9 +129,9 @@ class RobinhoodApiData(Enum):
         type=float,
         category=RobinhoodCategories.DIVIDEND.value,
     )
-    DIVIDEND = RobinhoodDataType(
+    LAST_DIVIDEND = RobinhoodDataType(
         name="amount",
-        label="Dividend",
+        label="Last Dividend",
         type=float,
         category=RobinhoodCategories.DIVIDEND.value,
     )
