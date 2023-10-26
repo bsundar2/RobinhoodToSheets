@@ -1,5 +1,5 @@
-from src.constants.robinhood_constants import RobinhoodApiData
-from src.constants.column_constants import ColumnNames
+from src.constants.robinhood import RobinhoodApiData
+from src.constants.additional_columns import ColumnNames
 
 
 BASE_SHEET_HEADERS = {
@@ -9,13 +9,17 @@ BASE_SHEET_HEADERS = {
     RobinhoodApiData.QUANTITY.value.name: RobinhoodApiData.QUANTITY.value.label,
     ColumnNames.TOTAL.value.name: ColumnNames.TOTAL.value.label,
     ColumnNames.DIVERSITY.value.name: ColumnNames.DIVERSITY.value.label,
-    RobinhoodApiData.TOTAL_DIVIDEND.value.name: RobinhoodApiData.TOTAL_DIVIDEND.value.label,
 }
 
 FUNDAMENTALS_HEADERS = {
-    RobinhoodApiData.HIGH_52_WK.value.name: RobinhoodApiData.HIGH_52_WK.value.label,
-    RobinhoodApiData.LOW_52_WK.value.name: RobinhoodApiData.LOW_52_WK.value.label,
     RobinhoodApiData.DESCRIPTION.value.name: RobinhoodApiData.DESCRIPTION.value.label,
     RobinhoodApiData.SECTOR.value.name: RobinhoodApiData.SECTOR.value.label,
     RobinhoodApiData.INDUSTRY.value.name: RobinhoodApiData.INDUSTRY.value.label,
+}
+
+DIVIDEND_HEADERS = {
+    RobinhoodApiData.DVD_RATE.value.name: RobinhoodApiData.DVD_RATE.value.label,
+    RobinhoodApiData.LAST_DIVIDEND.value.name: RobinhoodApiData.LAST_DIVIDEND.value.label,
+    RobinhoodApiData.TOTAL_DVD_AMT_PAID.value.name: RobinhoodApiData.TOTAL_DVD_AMT_PAID.value.label,
+    ColumnNames.PROJECTED_DVD.value.name: ColumnNames.PROJECTED_DVD.value.label,
 }
