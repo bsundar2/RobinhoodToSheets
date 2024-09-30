@@ -197,7 +197,7 @@ def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
     """
     Driver function to get user's portfolio from Robinhood and write it to a Google sheet.
     :param is_live: Boolean to control whether portfolio data is fetched from Robinhood or mock file
-    :param write_mock: Boolean to control whether portfolio data is writtem to mock file
+    :param write_mock: Boolean to control whether portfolio data is written to mock file
     :return:
     """
     print("Getting RH portfolio as dataframe")
