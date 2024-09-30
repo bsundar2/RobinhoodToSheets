@@ -9,7 +9,7 @@ RH_OTP_KEY_ENV_VAR = "RH_OTP_KEY"
 
 
 # RH ticker exceptions
-MONTHLY_DIVIDEND_TICKERS = {"STAG", "O", "LAND"}
+MONTHLY_DIVIDEND_TICKERS = {"STAG", "O", "LAND", "ADC"}
 
 # RH specific types
 RobinhoodDataType = namedtuple(
