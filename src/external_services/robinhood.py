@@ -49,7 +49,7 @@ def login() -> Dict[str, Any]:
     totp = pyotp.TOTP(credentials.otp_key).now()
     print(f"OTP: {totp}")
 
-    login_obj = rh.login(credentials.email, credentials.password, mfa_code=totp)
+    login_obj = rh.login(credentials.email, credentials.password, mfa_code=totp, store_session=False)
     print(login_obj["detail"])
 
     return login_obj
