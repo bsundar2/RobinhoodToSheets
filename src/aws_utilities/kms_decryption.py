@@ -19,9 +19,6 @@ def is_base64(s: str):
 def decrypt_kms_value(encrypted_value):
     """Decrypt a base64-encoded KMS-encrypted value using AWS KMS."""
     kms_client = boto3.client(KMS, region_name=US_WEST_REGION)
-    print(f"Encrypted Value: {encrypted_value}")
-    print(f"Ciphertext Blob: {base64.b64decode(encrypted_value)}")
-
     decrypted_value = kms_client.decrypt(
         CiphertextBlob=base64.b64decode(encrypted_value)
     )[KMS_PLAINTEXT].decode(UTF_8)
