@@ -44,12 +44,10 @@ def get_credentials() -> RobinhoodCredentials:
 @cache
 def login() -> Dict[str, Any]:
     credentials = get_credentials()
-
     totp = pyotp.TOTP(credentials.otp_key).now()
     print(f"OTP: {totp}")
 
     login_obj = rh.login(credentials.email, credentials.password, mfa_code=totp, store_session=False)
-    print(login_obj["detail"])
 
     return login_obj
 
