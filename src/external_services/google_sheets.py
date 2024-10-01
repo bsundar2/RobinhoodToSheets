@@ -1,6 +1,5 @@
 import pygsheets
 import pandas as pd
-import time
 
 from src.constants.gsheets import DEFAULT_SPREADSHEET_NAME, SHEETS_AUTHENTICATION_FILE
 
@@ -19,8 +18,6 @@ def write_to_sheets(
     worksheet = sheet.worksheet_by_title(worksheet_name)
     worksheet.clear()
 
-    print("Write to sheet")
-    start = time.time()
+    print("Writing to sheet")
     worksheet.set_dataframe(write_data, (1, 1), copy_index=False, copy_head=True)
-    end = time.time()
-    print(f"Time taken to write to the sheet: {end - start}")
+    print("Updated Google sheet successfully")

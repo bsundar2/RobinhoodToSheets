@@ -1,5 +1,8 @@
 FROM public.ecr.aws/lambda/python:3.11
 
+# Copy AWS Lambda RIE into the container
+ADD aws-lambda-rie /usr/local/bin/aws-lambda-rie
+
 # Copy requirements.txt
 COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
