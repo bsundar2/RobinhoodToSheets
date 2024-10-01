@@ -6,6 +6,7 @@ import json
 from typing import Dict, Any, List
 from functools import cache
 
+from src.aws_utilities.kms_decryption import is_base64, decrypt_kms_value
 from src.constants.robinhood import (
     RH_EMAIL_ENV_VAR,
     RH_PASSWORD_ENV_VAR,
@@ -15,22 +16,34 @@ from src.constants.robinhood import (
 
 
 def get_credentials() -> RobinhoodCredentials:
-    rh_email = os.environ.get(RH_EMAIL_ENV_VAR)
-    rh_password = os.environ.get(RH_PASSWORD_ENV_VAR)
-    rh_otp_key = os.environ.get(RH_OTP_KEY_ENV_VAR)
+    print("Getting credentials from environment variables.")
+    rh_email = os.getenv(RH_EMAIL_ENV_VAR)
+    rh_password = os.getenv(RH_PASSWORD_ENV_VAR)
+    rh_otp_key = os.getenv(RH_OTP_KEY_ENV_VAR)
 
     if not any([rh_email, rh_password, rh_otp_key]):
         raise EnvironmentError(
             f"Missing required environment variables: {[RH_EMAIL_ENV_VAR, RH_PASSWORD_ENV_VAR, RH_OTP_KEY_ENV_VAR]}"
         )
 
-    return RobinhoodCredentials(rh_email, rh_password, rh_otp_key)
+    credentials = []
+    for secret_value in [rh_email, rh_password, rh_otp_key]:
+        if is_base64(secret_value):
+            # If the value appears to be base64-encoded (likely encrypted), decrypt it
+            print("Encrypted value detected, attempting to decrypt...")
+            decrypted_value = decrypt_kms_value(secret_value)
+            credentials.append(decrypted_value)
+            print(f"Decryption successful")
+        else:
+            # If it's not encrypted, just use the plain text value
+            credentials.append(secret_value)
+
+    return RobinhoodCredentials(*credentials)
 
 
 @cache
 def login() -> Dict[str, Any]:
     credentials = get_credentials()
-    print(credentials)
 
     totp = pyotp.TOTP(credentials.otp_key).now()
     print(f"OTP: {totp}")
