@@ -28,7 +28,7 @@ def get_credentials() -> RobinhoodCredentials:
 
     credentials = []
     for secret_value in [rh_email, rh_password, rh_otp_key]:
-        if is_base64(secret_value):
+        if is_base64(secret_value) and len(secret_value) > 16:
             # If the value appears to be base64-encoded (likely encrypted), decrypt it
             print("Encrypted value detected, attempting to decrypt...")
             decrypted_value = decrypt_kms_value(secret_value)
@@ -63,14 +63,13 @@ def get_rh_portfolio(is_live=False, write_to_mock=False) -> Dict[str, Dict[str, 
         my_stocks = rh.build_holdings(with_dividends=True)
         print("Successfully retrieved current portfolio.")
         end = time.time()
-        print(f"Time taken to fetch portfolio: {end - start}")
+        print(f"Time taken to fetch portfolio: {end - start} seconds")
 
         if write_to_mock:
             print("Writing portfolio to mock holdings file")
             with open("data/mock_holdings.json", "w") as mock_holding_file:
                 json.dump(my_stocks, mock_holding_file)
 
-        print(my_stocks)
         return my_stocks
     else:
         with open("data/mock_holdings.json", "r") as f:
