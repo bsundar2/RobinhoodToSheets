@@ -44,7 +44,6 @@ def get_credentials() -> RobinhoodCredentials:
 @cache
 def login() -> Dict[str, Any]:
     credentials = get_credentials()
-    print(credentials)
 
     totp = pyotp.TOTP(credentials.otp_key).now()
     print(f"OTP: {totp}")
