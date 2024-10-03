@@ -5,8 +5,6 @@ import pandas as pd
 from functools import cache
 from typing import Dict
 
-from pandas.core.computation.ops import Div
-
 from src.external_services.robinhood import (
     get_rh_portfolio,
     get_stock_fundamentals,
@@ -206,7 +204,7 @@ def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
     print("Replace NaN with 0 across DF")
     portfolio_df = portfolio_df.fillna(0)
 
-    print("Filter data based on type")
+    print("Filter data based on portfolio type - stocks, ETFs")
     stock_portfolio_df = portfolio_df[
         portfolio_df[RobinhoodApiData.TYPE.value.name]
         != RobinhoodProductTypes.ETP.value

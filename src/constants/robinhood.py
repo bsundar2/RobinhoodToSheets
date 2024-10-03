@@ -11,6 +11,8 @@ RH_OTP_KEY_ENV_VAR = "RH_OTP_KEY"
 # RH ticker exceptions
 MONTHLY_DIVIDEND_TICKERS = {"STAG", "O", "LAND", "ADC"}
 
+ACCOUNT_BUYING_POWER = "buying_power"
+
 # RH specific types
 RobinhoodDataType = namedtuple(
     "RobinhoodDataType", field_names=["name", "label", "type", "category"]

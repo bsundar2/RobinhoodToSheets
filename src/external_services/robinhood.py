@@ -11,7 +11,7 @@ from src.constants.robinhood import (
     RH_EMAIL_ENV_VAR,
     RH_PASSWORD_ENV_VAR,
     RH_OTP_KEY_ENV_VAR,
-    RobinhoodCredentials,
+    RobinhoodCredentials, ACCOUNT_BUYING_POWER,
 )
 
 
@@ -85,3 +85,10 @@ def get_dividends() -> List[Dict[str, Any]]:
     login()
     dividends = rh.get_dividends()
     return dividends
+
+
+def get_uninvested_cash() -> str:
+    login()
+    account_profile = rh.profiles.load_account_profile()
+    buying_power = account_profile[ACCOUNT_BUYING_POWER]
+    return buying_power
