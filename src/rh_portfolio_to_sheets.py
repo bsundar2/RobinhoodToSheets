@@ -4,6 +4,7 @@ File containing the logic of exporting a Robinhood portfolio to Google Sheets.
 import pandas as pd
 from typing import Dict
 
+from src.external_services.google_sheets import write_to_sheets
 from src.external_services.robinhood import (
     get_rh_portfolio,
 )
@@ -94,8 +95,7 @@ def write_required_columns_to_sheets(portfolio: pd.DataFrame, worksheet_name: st
     print("Dropping columns that are not required")
     portfolio = select_portfolio_columns(portfolio)
 
-    print(portfolio)
-    # write_to_sheets(portfolio, worksheet_name)
+    write_to_sheets(portfolio, worksheet_name)
 
 
 def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
