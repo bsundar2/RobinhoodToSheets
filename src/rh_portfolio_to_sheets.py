@@ -2,21 +2,14 @@
 File containing the logic of exporting a Robinhood portfolio to Google Sheets.
 """
 import pandas as pd
-from functools import cache
 from typing import Dict
 
 from src.external_services.robinhood import (
     get_rh_portfolio,
-    get_stock_fundamentals,
-    get_dividends,
 )
-from src.external_services.google_sheets import write_to_sheets
 from src.constants.robinhood import (
     RobinhoodApiData,
     RobinhoodProductTypes,
-    RobinhoodDividendStatus,
-    RobinhoodCategories,
-    MONTHLY_DIVIDEND_TICKERS,
 )
 from src.constants.additional_columns import CalculatedColumnManager, ColumnNames
 from src.constants.report import (
@@ -24,11 +17,11 @@ from src.constants.report import (
     FUNDAMENTALS_HEADERS,
     DIVIDEND_HEADERS,
 )
-from src.constants.common import DataFrameMergeType, MONTHS_IN_QUARTER
 from src.constants.gsheets import (
     RH_STOCK_DUMP_SHEET_NAME,
     RH_ETF_DUMP_SHEET_NAME,
 )
+from src.rh_data_util import add_dividend_information, add_fundamentals_information
 
 
 def get_rh_portfolio_as_df(is_live=False, write_mock=False) -> pd.DataFrame:
@@ -71,88 +64,6 @@ def select_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
     # Rename column headers
     portfolio = portfolio.rename(columns=headers)
 
-    return portfolio
-
-
-@cache
-def get_dividend_history() -> pd.DataFrame:
-    dividends = get_dividends()
-    df = pd.DataFrame(dividends)
-
-    # Filter out voided dividends
-    df = df[
-        df[RobinhoodApiData.DVD_STATUS.value.name]
-        != RobinhoodDividendStatus.VOIDED.value
-    ]
-    return df
-
-
-def add_dividend_information(portfolio: pd.DataFrame) -> pd.DataFrame:
-    """
-    Get dividend history for the portfolio and keep only the latest dividend.
-    """
-    dividend_df = get_dividend_history()
-
-    # Sort by latest payable date
-    dividend_df[RobinhoodApiData.PAYABLE_DATE.value.name] = pd.to_datetime(
-        dividend_df[RobinhoodApiData.PAYABLE_DATE.value.name]
-    )
-    dividend_df = dividend_df.sort_values(
-        by=RobinhoodApiData.PAYABLE_DATE.value.name, ascending=False
-    )
-
-    # Group by ticker name
-    dividend_groups = dividend_df.groupby(
-        by=RobinhoodApiData.INSTRUMENT.value.name, as_index=False
-    )
-    dividend_df = dividend_groups.first()
-
-    # Merge into portfolio
-    portfolio = portfolio.merge(
-        dividend_df,
-        how=DataFrameMergeType.LEFT.value,
-        on=RobinhoodApiData.INSTRUMENT.value.name,
-    )
-
-    # Replace NaN with 0 for dividend columns
-    for column in RobinhoodApiData:
-        if (
-            column.value.category == RobinhoodCategories.DIVIDEND.value
-            and column.value.type == float
-        ):
-            portfolio[column.value.name] = portfolio[column.value.name].fillna(0)
-
-    # Update dividend for monthly payout stocks
-    portfolio.loc[
-        portfolio[RobinhoodApiData.TICKER.value.name].isin(MONTHLY_DIVIDEND_TICKERS),
-        [
-            RobinhoodApiData.DVD_RATE.value.name,
-            RobinhoodApiData.LAST_DIVIDEND.value.name,
-        ],
-    ] = portfolio.loc[
-        portfolio[RobinhoodApiData.TICKER.value.name].isin(MONTHLY_DIVIDEND_TICKERS),
-        [
-            RobinhoodApiData.DVD_RATE.value.name,
-            RobinhoodApiData.LAST_DIVIDEND.value.name,
-        ],
-    ].apply(
-        lambda x: x.astype(float) * MONTHS_IN_QUARTER
-    )
-
-    return portfolio
-
-
-def add_fundamentals_information(portfolio: pd.DataFrame) -> pd.DataFrame:
-    tickers = list(portfolio[RobinhoodApiData.TICKER.value.name])
-    fundamentals = get_stock_fundamentals(tickers)
-
-    df = pd.DataFrame(fundamentals)
-    portfolio = portfolio.merge(
-        df,
-        how=DataFrameMergeType.INNER.value,
-        left_on=RobinhoodApiData.TICKER.value.name,
-        right_on=RobinhoodApiData.SYMBOL.value.name,
-    )
     return portfolio
 
 
