@@ -1,6 +1,10 @@
 import argparse
 from src.rh_portfolio_to_sheets import export_rh_portfolio_to_sheets
 
+def scratchpad():
+    print("Executing scratchpad code.")
+    print("Done executing scratchpad code.")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -18,6 +22,16 @@ if __name__ == "__main__":
         action="store_true",
         default=False,
     )
+    parser.add_argument(
+        "-s",
+        "--scratchpad",
+        help="Run code in scratchpad",
+        action="store_true",
+        default=False,
+    )
     args = parser.parse_args()
 
-    export_rh_portfolio_to_sheets(args.live, args.write_mock)
+    if not args.scratchpad:
+        export_rh_portfolio_to_sheets(args.live, args.write_mock)
+    else:
+        scratchpad()
