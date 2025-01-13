@@ -133,7 +133,7 @@ class RobinhoodApiData(Enum):
     )
     LAST_DIVIDEND = RobinhoodDataType(
         name="amount",
-        label="Last Dividend",
+        label="Last Quarterly Dividend",
         type=float,
         category=RobinhoodCategories.DIVIDEND.value,
     )

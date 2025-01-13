@@ -41,9 +41,9 @@ def get_rh_portfolio_as_df(is_live=False, write_mock=False) -> pd.DataFrame:
     return portfolio_df
 
 
-def select_report_headers() -> Dict[str, str]:
+def get_spreadsheet_column_headers() -> Dict[str, str]:
     """
-    Function to select the report headers to be printed.
+    Function to select the column headers to be printed in the sheet.
     :return: Dictionary mapping header name to value text that is printed
     """
     headers = BASE_SHEET_HEADERS.copy()
@@ -60,7 +60,7 @@ def select_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
     :return: DataFrame
     """
     # Select required columns
-    headers = select_report_headers()
+    headers = get_spreadsheet_column_headers()
     column_names = [column for column in headers.keys()]
     portfolio = portfolio[portfolio.columns.intersection(column_names)]
 
