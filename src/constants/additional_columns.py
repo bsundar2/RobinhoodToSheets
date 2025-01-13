@@ -19,7 +19,7 @@ class ColumnNames(Enum):
     )
 
 
-class AdditionalColumns:
+class CalculatedColumnManager:
     def __init__(self, portfolio: DataFrame):
         self.portfolio = portfolio
 
@@ -39,7 +39,6 @@ class AdditionalColumns:
                 )
             ),
         )
-        return self.portfolio
 
     def add_diversity_column(self) -> DataFrame:
         """
@@ -53,7 +52,6 @@ class AdditionalColumns:
                 / self.portfolio[ColumnNames.TOTAL.value.name].sum()
             ),
         )
-        return self.portfolio
 
     def add_projected_dividend_column(self) -> DataFrame:
         """
@@ -71,4 +69,3 @@ class AdditionalColumns:
                 )
             ),
         )
-        return self.portfolio

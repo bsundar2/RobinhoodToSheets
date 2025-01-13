@@ -18,7 +18,7 @@ from src.constants.robinhood import (
     RobinhoodCategories,
     MONTHLY_DIVIDEND_TICKERS,
 )
-from src.constants.additional_columns import AdditionalColumns, ColumnNames
+from src.constants.additional_columns import CalculatedColumnManager, ColumnNames
 from src.constants.report import (
     BASE_SHEET_HEADERS,
     FUNDAMENTALS_HEADERS,
@@ -157,24 +157,19 @@ def add_fundamentals_information(portfolio: pd.DataFrame) -> pd.DataFrame:
 
 
 def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
-    # Calculated total and diversity columns
-    user_columns = AdditionalColumns(portfolio)
-    portfolio = user_columns.add_total_column()
-
-    user_columns = AdditionalColumns(portfolio)
-    portfolio = user_columns.add_diversity_column()
-
-    # Additional information
+    # Get additional information
     print("Getting fundamentals data")
     portfolio = add_fundamentals_information(portfolio)
 
     print("Getting dividend data")
     portfolio = add_dividend_information(portfolio)
 
-    # Calculated projected dividend column
-    user_columns = AdditionalColumns(portfolio)
-    portfolio = user_columns.add_projected_dividend_column()
-
+    # Calculated columns
+    print("Adding columns for additional calculated information")
+    custom_columns = CalculatedColumnManager(portfolio)
+    custom_columns.add_total_column()
+    custom_columns.add_diversity_column()
+    custom_columns.add_projected_dividend_column()
     return portfolio
 
 
@@ -188,7 +183,8 @@ def write_required_columns_to_sheets(portfolio: pd.DataFrame, worksheet_name: st
     print("Dropping columns that are not required")
     portfolio = select_portfolio_columns(portfolio)
 
-    write_to_sheets(portfolio, worksheet_name)
+    print(portfolio)
+    # write_to_sheets(portfolio, worksheet_name)
 
 
 def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
