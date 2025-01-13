@@ -178,7 +178,7 @@ def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     return portfolio
 
 
-def write_required_columns(portfolio: pd.DataFrame, worksheet_name: str):
+def write_required_columns_to_sheets(portfolio: pd.DataFrame, worksheet_name: str):
     print("Adding additional columns and information")
     portfolio = add_extra_information(portfolio)
 
@@ -215,7 +215,7 @@ def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
     ]
 
     print("Writing stock portfolio to sheets")
-    write_required_columns(stock_portfolio_df, worksheet_name=RH_STOCK_DUMP_SHEET_NAME)
+    write_required_columns_to_sheets(stock_portfolio_df, worksheet_name=RH_STOCK_DUMP_SHEET_NAME)
 
     print("Writing ETF portfolio to sheets")
-    write_required_columns(etf_portfolio_df, worksheet_name=RH_ETF_DUMP_SHEET_NAME)
+    write_required_columns_to_sheets(etf_portfolio_df, worksheet_name=RH_ETF_DUMP_SHEET_NAME)
