@@ -26,7 +26,7 @@ from src.constants.gsheets import (
 from src.rh_data_util import (
     add_latest_dividend_information,
     add_fundamentals_information,
-    get_last_years_dividend,
+    get_last_year_and_ytd_dividend,
 )
 
 
@@ -87,7 +87,7 @@ def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     custom_columns.add_total_column()
     custom_columns.add_diversity_column()
     custom_columns.add_projected_dividend_column()
-    portfolio = custom_columns.add_dividend_payout_columns(get_last_years_dividend())
+    portfolio = custom_columns.add_dividend_payout_columns(get_last_year_and_ytd_dividend())
     return portfolio
 
 

@@ -85,7 +85,7 @@ class CalculatedColumnManager:
 
     def add_dividend_payout_columns(self, dividend_info: DataFrame) -> DataFrame:
         """
-        Function to calculate the total dividends paid out in the last year.
+        Function to calculate the total dividends paid out in the last year and YTD.
         """
         self.portfolio = self.portfolio.merge(
             dividend_info[
