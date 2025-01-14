@@ -1,6 +1,7 @@
 """
 File containing the logic of exporting a Robinhood portfolio to Google Sheets.
 """
+
 import pandas as pd
 from typing import Dict
 
@@ -22,7 +23,11 @@ from src.constants.gsheets import (
     RH_STOCK_DUMP_SHEET_NAME,
     RH_ETF_DUMP_SHEET_NAME,
 )
-from src.rh_data_util import add_dividend_information, add_fundamentals_information
+from src.rh_data_util import (
+    add_latest_dividend_information,
+    add_fundamentals_information,
+    get_last_years_dividend,
+)
 
 
 def get_rh_portfolio_as_df(is_live=False, write_mock=False) -> pd.DataFrame:
@@ -74,7 +79,7 @@ def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     portfolio = add_fundamentals_information(portfolio)
 
     print("Getting dividend data")
-    portfolio = add_dividend_information(portfolio)
+    portfolio = add_latest_dividend_information(portfolio)
 
     # Calculated columns
     print("Adding columns for additional calculated information")
@@ -82,6 +87,7 @@ def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     custom_columns.add_total_column()
     custom_columns.add_diversity_column()
     custom_columns.add_projected_dividend_column()
+    portfolio = custom_columns.add_dividend_payout_columns(get_last_years_dividend())
     return portfolio
 
 
@@ -122,7 +128,11 @@ def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
     ]
 
     print("Writing stock portfolio to sheets")
-    write_required_columns_to_sheets(stock_portfolio_df, worksheet_name=RH_STOCK_DUMP_SHEET_NAME)
+    write_required_columns_to_sheets(
+        stock_portfolio_df, worksheet_name=RH_STOCK_DUMP_SHEET_NAME
+    )
 
     print("Writing ETF portfolio to sheets")
-    write_required_columns_to_sheets(etf_portfolio_df, worksheet_name=RH_ETF_DUMP_SHEET_NAME)
+    write_required_columns_to_sheets(
+        etf_portfolio_df, worksheet_name=RH_ETF_DUMP_SHEET_NAME
+    )
