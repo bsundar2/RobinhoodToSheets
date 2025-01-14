@@ -8,6 +8,7 @@ from typing import Dict
 from src.external_services.google_sheets import write_to_sheets
 from src.external_services.robinhood import (
     get_rh_portfolio,
+    get_crypto_portfolio,
 )
 from src.constants.robinhood import (
     RobinhoodApiData,
@@ -22,6 +23,7 @@ from src.constants.report import (
 from src.constants.gsheets import (
     RH_STOCK_DUMP_SHEET_NAME,
     RH_ETF_DUMP_SHEET_NAME,
+    RH_CRYPTO_DUMP_SHEET_NAME,
 )
 from src.rh_data_util import (
     add_latest_dividend_information,
@@ -40,6 +42,15 @@ def get_rh_portfolio_as_df(is_live=False, write_mock=False) -> pd.DataFrame:
     return portfolio_df
 
 
+def get_crypto_portfolio_as_df(is_live=False) -> pd.DataFrame:
+    crypto_portfolio = get_crypto_portfolio(is_live)
+    portfolio_df = pd.DataFrame(crypto_portfolio)
+    portfolio_df = portfolio_df.sort_values(
+        by=ColumnNames.TOTAL.value.label, ascending=False
+    )
+    return portfolio_df
+
+
 def get_spreadsheet_column_headers() -> Dict[str, str]:
     """
     Function to select the column headers to be printed in the sheet.
@@ -52,7 +63,7 @@ def get_spreadsheet_column_headers() -> Dict[str, str]:
     return headers
 
 
-def select_portfolio_columns(portfolio: pd.DataFrame) -> pd.DataFrame:
+def select_columns_to_export(portfolio: pd.DataFrame) -> pd.DataFrame:
     """
     Function to select and order the required columns from the dataframe.
     :param portfolio: DataFrame object
@@ -87,7 +98,9 @@ def add_extra_information(portfolio: pd.DataFrame) -> pd.DataFrame:
     custom_columns.add_total_column()
     custom_columns.add_diversity_column()
     custom_columns.add_projected_dividend_column()
-    portfolio = custom_columns.add_dividend_payout_columns(get_last_year_and_ytd_dividend())
+    portfolio = custom_columns.add_dividend_payout_columns(
+        get_last_year_and_ytd_dividend()
+    )
     return portfolio
 
 
@@ -99,7 +112,7 @@ def write_required_columns_to_sheets(portfolio: pd.DataFrame, worksheet_name: st
     portfolio = portfolio.sort_values(by=ColumnNames.TOTAL.value.name, ascending=False)
 
     print("Dropping columns that are not required")
-    portfolio = select_portfolio_columns(portfolio)
+    portfolio = select_columns_to_export(portfolio)
 
     write_to_sheets(portfolio, worksheet_name)
 
@@ -136,3 +149,7 @@ def export_rh_portfolio_to_sheets(is_live, write_mock) -> None:
     write_required_columns_to_sheets(
         etf_portfolio_df, worksheet_name=RH_ETF_DUMP_SHEET_NAME
     )
+
+    crypto_portfolio_df = get_crypto_portfolio_as_df(is_live)
+    print("Writing Crypto portfolio to sheets")
+    write_to_sheets(crypto_portfolio_df, worksheet_name=RH_CRYPTO_DUMP_SHEET_NAME)

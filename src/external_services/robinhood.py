@@ -7,11 +7,15 @@ from typing import Dict, Any, List
 from functools import cache
 
 from src.aws_utilities.kms_decryption import is_base64, decrypt_kms_value
+from src.constants.additional_columns import ColumnNames
 from src.constants.robinhood import (
     RH_EMAIL_ENV_VAR,
     RH_PASSWORD_ENV_VAR,
     RH_OTP_KEY_ENV_VAR,
-    RobinhoodCredentials, ACCOUNT_BUYING_POWER,
+    RobinhoodCredentials,
+    ACCOUNT_BUYING_POWER,
+    CryptoDataKeys,
+    RobinhoodApiData,
 )
 
 
@@ -47,7 +51,9 @@ def login() -> Dict[str, Any]:
     totp = pyotp.TOTP(credentials.otp_key).now()
     print(f"OTP: {totp}")
 
-    login_obj = rh.login(credentials.email, credentials.password, mfa_code=totp, store_session=False)
+    login_obj = rh.login(
+        credentials.email, credentials.password, mfa_code=totp, store_session=False
+    )
 
     return login_obj
 
@@ -87,8 +93,47 @@ def get_dividends() -> List[Dict[str, Any]]:
     return dividends
 
 
-def get_uninvested_cash() -> str:
+def get_available_cash() -> float:
     login()
     account_profile = rh.profiles.load_account_profile()
     buying_power = account_profile[ACCOUNT_BUYING_POWER]
     return buying_power
+
+
+def get_crypto_portfolio(is_live=False):
+    crypto_data = []
+    if is_live:
+        login()
+        print("Getting crypto portfolio.")
+        crypto_positions = rh.crypto.get_crypto_positions()
+
+        for position in crypto_positions:
+            # Extract relevant details
+            crypto_id = position[CryptoDataKeys.CURRENCY][CryptoDataKeys.TICKER_CODE]
+            name = position[CryptoDataKeys.CURRENCY][CryptoDataKeys.NAME]
+            quantity = float(position[CryptoDataKeys.QUANTITY])
+            average_buy_price = (
+                float(
+                    position[CryptoDataKeys.COST_BASES][0][
+                        CryptoDataKeys.DIRECT_COST_BASIS
+                    ]
+                )
+                / float(
+                    position[CryptoDataKeys.COST_BASES][0][
+                        CryptoDataKeys.DIRECT_QUANTITY
+                    ]
+                )
+                if position[CryptoDataKeys.COST_BASES]
+                else 0
+            )
+
+            crypto_data.append(
+                {
+                    RobinhoodApiData.TICKER.value.label: crypto_id,
+                    RobinhoodApiData.NAME.value.label: name,
+                    RobinhoodApiData.AVG_BUY_PRICE.value.label: average_buy_price,
+                    RobinhoodApiData.QUANTITY.value.label: quantity,
+                    ColumnNames.TOTAL.value.label: quantity * average_buy_price,
+                }
+            )
+    return crypto_data

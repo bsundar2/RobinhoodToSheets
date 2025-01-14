@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, StrEnum
 from dataclasses import dataclass
 from collections import namedtuple
 
@@ -26,23 +26,24 @@ class RobinhoodCredentials:
     otp_key: str
 
 
-class RobinhoodDividendStatus(Enum):
+class RobinhoodDividendStatus(StrEnum):
     VOIDED = "voided"
     PENDING = "pending"
     REINVESTED = "reinvested"
     PAID = "paid"
 
 
-class RobinhoodProductTypes(Enum):
+class RobinhoodProductTypes(StrEnum):
     STOCK = "stock"
     ETP = "etp"
 
 
-class RobinhoodCategories(Enum):
+class RobinhoodCategories(StrEnum):
     PORTFOLIO = "portfolio"
     FUNDAMENTALS = "fundamentals"
     ID = "id"
     DIVIDEND = "dividend"
+    CRYPTO = "crypto"
 
 
 class RobinhoodApiData(Enum):
@@ -155,3 +156,13 @@ class RobinhoodApiData(Enum):
         type=float,
         category=RobinhoodCategories.DIVIDEND.value,
     )
+
+
+class CryptoDataKeys(StrEnum):
+    CURRENCY = "currency"
+    TICKER_CODE = "code"
+    NAME = "name"
+    QUANTITY = "quantity_available"
+    COST_BASES = "cost_bases"
+    DIRECT_COST_BASIS = "direct_cost_basis"
+    DIRECT_QUANTITY = "direct_quantity"
