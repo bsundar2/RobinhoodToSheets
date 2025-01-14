@@ -2,5 +2,4 @@ boto3
 pandas==2.2.0
 pygsheets
 pyotp
-python-dateutil
 robin_stocks==3.3.0
