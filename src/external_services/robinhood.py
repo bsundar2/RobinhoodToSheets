@@ -52,7 +52,11 @@ def login() -> Dict[str, Any]:
     print(f"OTP: {totp}")
 
     login_obj = rh.login(
-        credentials.email, credentials.password, mfa_code=totp, store_session=False
+        credentials.email,
+        credentials.password,
+        mfa_code=totp,
+        store_session=False,
+        pickle_path="/tmp",  # Lambda's writable directory
     )
 
     return login_obj
