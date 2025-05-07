@@ -132,6 +132,7 @@ dmypy.json
 # Idea
 .idea
 /data/gsheets_authentication.json
+/data/mock_holdings.json
 /get_env_details
 /initialize
 /postactivate
